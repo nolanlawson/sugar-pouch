@@ -3,6 +3,7 @@ SugarPouch
 
 SugarPouch is a PouchDB plugin that offers a simpler, more streamlined API for some common PouchDB operations.  It's syntactic sugar, but in many cases it's also a utility belt. If PouchDB is jQuery, think of SugarPouch as underscore.
 
+**Warning!  This is vaporware.  I'm doing doc-driven development, so I'm writing the docs before I write any working code.  Do not be tricked by this README into thinking that this is a working plugin!  This warning will be removed when it's ready.**
 API
 ---
 
