@@ -1,9 +1,10 @@
 SugarPouch
 ==========
 
-SugarPouch is a PouchDB plugin that offers a simpler, more streamlined API for some common PouchDB operations.  It's syntactic sugar, but in many cases it's also a utility belt. If PouchDB is jQuery, think of SugarPouch as underscore.
+SugarPouch is a PouchDB plugin that offers a simpler, more streamlined API for common PouchDB operations.  It's syntactic sugar, but in many cases it's also a utility belt. If PouchDB is jQuery for databases, then SugarPouch is your underscore.
 
 **Warning!  This is vaporware.  I'm doing doc-driven development, so I'm writing the docs before I write any working code.  Do not be tricked by this README into thinking that this is a working plugin!  This warning will be removed when it's ready.**
+
 API
 ---
 
@@ -13,61 +14,35 @@ All operations are on a PouchDB database `pouch`, e.g.
 var pouch = new PouchDB('mydb');
 ```
 
-**Convenience functions**
-
-* putMany
-* upsert
-* count
-
 **Indexes & querying**
 
 * createIndex
 * findBy*
 * countBy*
+* updateBy*
+* deleteBy*
 * max*
 * min*
+
+**Built-in query functions**
+
 * findById
+* updateById
+* deleteById
+* maxId
+* minId
+
+**Convenience functions**
+
+* putMany
+* upsert
+* count
+* grep
 
 **Utility functions**
 
 * createBlob
 * supportedAdapters
-
-### Convenience functions
-
-#### putMany(documents [, options] [, callback])
-
-The same as `bulkDocs`, but it takes a list of documents and returns that same list of documents with the `_rev` added (and the `_id` added, if you didn't include an `_id`).  Within the list, an error object is returned if a document conflict occurred.
-
-#### upsert(docId, updateFunction [, callback])
-
-Updates or inserts a document with the given `docId`, using the given `updateFunction`.  An update function take a document as input, and returns that same document with any changes you would like to apply.  The database is repeatedly called until we get the freshest version of that document, at which point the update is applied.
-
-The function can return `undefined` or `false` instead of a document object, in which case the update will not be applied.  (This is a performance improvement and is not strictly necessary.)
-
-```js
-pouch.upsert('myDocId', function (doc) {
-  if (doc.favoritePokemon) {
-    if (doc.favoritePokemon.indexOf('pikachu') === -1) {
-      // you don't like Pikachu?  You're crazy, you love Pikachu
-      doc.favoritePokemon.push('pikachu');
-      return doc;
-    } else {
-      // you already like Pikachu? awesome, no update necessary
-      return false;
-    }
-  } else {
-    // you don't even have a list of favorite pokemon? screw you, you're deleted
-    return {_deleted: true};
-  }
-});
-```
-
-If the document doesn't exist yet, the function will be passed an empty object `{}`. You don't have to worry about putting an `_id` or a `_rev` on the document; we'll handle that automatically.
-
-#### count()
-
-Returns the total count of non-deleted documents in the database.
 
 ### Indexes & querying
 
@@ -113,7 +88,7 @@ The available comparison operators are `'='`, `'<'`, `'>'`, `'<='`, `'>='`.  If 
 
 The `options` you pass in are the same as for `query()`.  So you can always pass in options like `{descending: true}`, `{limit: 10}`, etc.
 
-#### countBy*([criteria] [, options] [, callback])
+#### countBy*(criteria [, options] [, callback])
 
 Guess what?  Now that you've created an index on `'name'`, you also have a method called `countByName()`.  It's the same as `findByName()`, except it returns the total count of documents that match your criteria.
 ```js
@@ -123,8 +98,8 @@ pouch.countByName('sally'); // how many people are named sally?
 If you're calling a remote CouchDB, then map/reduce is used under the hood, so the counting is distributed and only the count itself is sent over the wire.
 
 
-#### max*([criteria] [, options] [, callback])
-#### min*([criteria] [, options] [, callback])
+#### max*(criteria [, options] [, callback])
+#### min*(criteria [, options] [, callback])
 
 The fun doesn't stop there: you also now have `max*()` and `min*()` methods.  So let's assume you've created an index on `age`:
 
@@ -139,13 +114,25 @@ pouch.maxAge(); // returns the doc with the max age
 pouch.minAge(); // returns the doc with the min age
 ```
 
-#### findById([criteria] [, options] [, callback])
-#### maxId([criteria] [, options] [, callback])
-#### minId([criteria] [, options] [, callback])
+#### deleteBy*(criteria [, options] [, callback])
 
-Okay, so since `_id` is the primary index for a document, you also get these functions for free.  They work exactly the same as the `findBy*()`, `max*()`, and `min*()` methods.  Go have fun.
+Find all documents matching the given criteria, and then delete them.
 
-If you want a `countById()` method, though, you'll have to create an explicit index on `id` first.  I don't make the rules; I just enforce 'em.
+#### updateBy*(criteria, updateFunction [, options] [, callback])
+
+Find all documents matching the gtiven criteria, and then apply the update function to them.  Keeps retrying until the document is updated, similar to `upsert`.
+
+### Built-in query functions
+
+#### findById(criteria [, options] [, callback])
+#### maxId(criteria [, options] [, callback])
+#### minId(criteria [, options] [, callback])
+#### deleteById(criteria [, options] [, callback])
+#### updateById(criteria, updateFunction [, options] [, callback])
+
+Since `_id` is the primary index for a document, you also get these functions for free.  They work exactly the same as the `findBy*()`, `max*()`, etc. methods.  Go have fun.
+
+If you want a `countById()` method, though, you'll have to create an explicit index on `id` first, since we need to make an explicit map/reduce function.  Sorry, I don't make the rules; I just enforce 'em.
 
 ```js
 pouch.createIndex('_id').then(function () {
@@ -153,6 +140,56 @@ pouch.createIndex('_id').then(function () {
 }).then(function (count) {
   console.log('got count: ' + count);
 }).catch(function (err) { /* ... */ });
+```
+
+### Convenience functions
+
+#### putMany(documents [, options] [, callback])
+
+The same as `bulkDocs`, but it takes a list of documents and returns that same list of documents with the `_rev` added (and the `_id` added, if you didn't include an `_id`).  Within the list, an error object is returned if a document conflict occurred.
+
+#### upsert(docId, updateFunction [, callback])
+
+Updates or inserts a document with the given `docId`, using the given `updateFunction`.  An update function take a document as input, and returns that same document with any changes you would like to apply.  The database is repeatedly called until we get the freshest version of that document, at which point the update is applied.
+
+The function can return `undefined` or `false` instead of a document object, in which case the update will not be applied.  (This is a performance improvement and is not strictly necessary.)
+
+```js
+pouch.upsert('myDocId', function (doc) {
+  if (doc.favoritePokemon) {
+    if (doc.favoritePokemon.indexOf('pikachu') === -1) {
+      // you don't like Pikachu?  You're crazy, you love Pikachu
+      doc.favoritePokemon.push('pikachu');
+      return doc;
+    } else {
+      // you already like Pikachu? awesome, no update necessary
+      return false;
+    }
+  } else {
+    // you don't even have a list of favorite pokemon? screw you, you're deleted
+    return {_deleted: true};
+  }
+});
+```
+
+If the document doesn't exist yet, the function will be passed an empty object `{}`. You don't have to worry about putting an `_id` or a `_rev` on the document; we'll handle that automatically.
+
+#### count([callback])
+
+Returns the total count of non-deleted documents in the database.
+
+#### grep(field, criteria [, options] [, callback])
+
+Performs an on-the-fly search using the given criteria, without using an index.  Performed in-memory without needing to write an index to disk first, so it's faster than the built-in `query()` method.
+
+All other `options` are the same as for `query()`, e.g. `{limit: 10}`, `{descending: true}`.
+
+```js
+pouch.grep('name', '=', 'sally'); // find docs where doc.name === 'sally'
+
+pouch.grep('name', 'in', 'larry', 'moe', 'curly'); // find where doc.name is one of those 3
+
+// etc.
 ```
 
 ### Utility functions
