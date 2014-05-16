@@ -14,6 +14,8 @@ API
 * findByXXX
 * countByXXX
 * count
+* findById
+* countById
 
 All operations are on a PouchDB database, e.g.
 
@@ -55,6 +57,9 @@ pouch.upsert('myDocId', function (doc) {
 
 You don't have to worry about putting an `_id` field or a `_rev` field on the document; we'll handle that automatically.
 
+#### pouch.count()
+
+Returns the total count of non-deleted documents in the database.
 
 #### pouch.createIndex(indexSpec [, options] [, callback])
 
@@ -68,7 +73,7 @@ pouch.createIndex('employee.spouse.name') // index on doc.employee.spouse.name
 
 ##### Options
 
-* `skip_nulls`: defaults to false.  True if you want to skip any fields that are null; will save space on database where only a few documents actually have that field.  Example:
+* `skip_nulls`: defaults to false.  True if you want to skip any fields that are null; will save space on disk when there are only a few documents that have that field.  Example:
 
 ```js
 // only index if the doc has a field called 'favoritePokemon'
@@ -77,7 +82,7 @@ pouch.createIndex('favoritePokemon', {skip_nulls: true});
 
 #### pouch.findByXXX()
 
-Okay, now that you've created an index on `'name'`, your `pouch` will suddenly have a method called `findByName()`.  Imagine that!
+Okay, now that you've created an index on `'name'`, your `pouch` will suddenly have a method called `findByName()`.  Cool beans!
 
 If you index on `'employee.spouse.name'`, you'll have a method called `findByNameOfSpouseOfEmployee()`.  Names are automatically CamelCased for your convenience.
 
@@ -103,6 +108,25 @@ Guess what?  Now that you've created an index on `'name'`, you also have a metho
 pouch.countByName('sally'); // how many people are named sally?
 ```
 
-#### pouch.count()
+#### pouch.maxXXX()
+#### pouch.minXXX()
 
-Returns the total count of non-deleted documents in the database.
+The fun doesn't stop there.  You also now have a `maxName()` method.  Maybe `name` is a bad example, so let's assume you've created an index on `age`:
+
+```js
+pouch.createIndex('age'); // ain't nothin' but a number
+```
+
+So now you get this:
+
+```js
+pouch.maxAge(); // returns the doc with the max age
+pouch.minAge(); // returns the doc with the min age
+```
+
+#### pouch.findById()
+#### pouch.countById()
+#### pouch.maxId()
+#### pouch.minId()
+
+Okay, so since `_id` is the primary index for a document, you also get these functions for free.  They work exactly the same as the `findByXXX()`, `countByXXX()`, etc. methods.  Go have fun.
