@@ -43,6 +43,8 @@ var pouch = new PouchDB('mydb');
 
 * createBlob
 * supportedAdapters
+* load
+* dump
 
 ### Indexes & querying
 
@@ -201,4 +203,12 @@ Cross-browser shim for the `new Blob()` function.  Useful for working with attac
 #### supportedAdapters([callback])
 
 Returns the list of local adapters that this browser supports, e.g. `['idb']` on Firefox, `['websql']` on Safari, `['idb', 'websql']` on Chrome, and `['idb', 'websql', 'localstorage']` on Chrome if you have the localstorage plugin installed.
+
+#### dump([callback])
+
+Dump the entire database contents, including all revisions, to a single string that can then be loaded with the `load()` function.  Designed for testing; will probably hose your memory on larger databases.
+
+#### load(dumpString [, callback])
+
+Load the contents of the `dumpString`.  It's assumed that this is called on a new, empty database, or else it will return an error.
 
