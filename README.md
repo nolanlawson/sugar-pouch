@@ -19,7 +19,7 @@ pouch.putMany([
 });
 ```
 
-**Warning!  This is vaporware.  I'm doing doc-driven development, i.e. the docs before any working code.  This warning will be removed when the plugin is ready.**
+**Warning!  This is vaporware.  I'm doing doc-driven development, i.e. I'm writing the docs before any working code.  This warning will be removed when the plugin is ready.**
 
 API
 ---
