@@ -37,7 +37,8 @@ var pouch = new PouchDB('mydb');
 
 * putMany
 * upsert
-* count
+* dbSize
+* dbVersion
 * grep
 
 **Utility functions**
@@ -193,9 +194,13 @@ pouch.upsert('myDocId', function (doc) {
 
 If the document doesn't exist yet, the function will be passed an empty object `{}`. You don't have to worry about putting an `_id` or a `_rev` on the document; we'll handle that automatically.
 
-#### count([callback])
+#### dbSize([callback])
 
 Returns the total count of non-deleted documents in the database.
+
+#### dbVersion([callback])
+
+Returns the current version of the database (a.k.a. the `seq`).  Starts at 0, and increments every time a document is added or modified.
 
 #### grep(field, criteria [, options] [, callback])
 
