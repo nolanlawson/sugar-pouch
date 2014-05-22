@@ -3,6 +3,23 @@ SugarPouch
 
 SugarPouch is a PouchDB plugin that offers a simpler, more streamlined API for common PouchDB operations.  It's syntactic sugar, but in many cases it's also a utility belt. If PouchDB is jQuery for databases, then SugarPouch is your underscore.
 
+```js
+var pouch = new PouchDB('myDB');
+
+pouch.putMany([
+  {name: 'charmander'},
+  {name: 'pikachu'}
+  {name: 'squirtle'}
+]).then(function () {
+  return pouch.createIndex('name');
+}).then(function () {
+  // pikachu, I choose you!
+  return pouch.findByName('pikachu');
+}).then(function (docs) {
+  // pikachu was chosen by you!
+});
+```
+
 **Warning!  This is vaporware.  I'm doing doc-driven development, so I'm writing the docs before I write any working code.  Do not be tricked by this README into thinking that this is a working plugin!  This warning will be removed when it's ready.**
 
 API
