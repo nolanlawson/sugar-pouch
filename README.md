@@ -13,10 +13,9 @@ pouch.putMany([
 ]).then(function () {
   return pouch.createIndex('name');
 }).then(function () {
-  // pikachu, I choose you!
-  return pouch.findByName('pikachu');
+  return pouch.findByName('pikachu'); // pikachu, I choose you!
 }).then(function (docs) {
-  // pikachu was chosen by you!
+  // you got pikachu!
 });
 ```
 
