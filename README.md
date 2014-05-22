@@ -138,7 +138,7 @@ pager.nextPage().then(function (page) {
 });
 ```
 
-It automatically fetches pages in advance, so if `hasMorePages()` returns true, you can be sure that there are more pages left.  It also correctly uses the `startkey` pattern, so you don't have to worry about performance.
+It automatically fetches one more doc than it needs, so if `hasMorePages()` returns true, you can be sure that there are more pages left.  It also correctly uses the `startkey` pattern, so you don't have to worry about performance.
 
 
 #### max*(criteria [, options] [, callback])
