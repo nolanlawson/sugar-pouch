@@ -27,7 +27,7 @@ API
 All operations are on a PouchDB database `pouch`, e.g.
 
 ```js
-var pouch = new PouchDB('mydb');
+var pouch = new PouchDB('myDB');
 ```
 
 **Indexes & querying**
