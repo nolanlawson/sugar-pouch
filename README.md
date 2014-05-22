@@ -119,16 +119,23 @@ If you're calling a remote CouchDB, then map/reduce is used under the hood, so t
 
 #### paginateBy*(criteria, pageSize [, options] [, callback])
 
-```js
-var pager = pouch.paginateByName('>=' 's', 10);
-pager.nextPage();
-```
-
 Returns a `Pager` object, on which you can call:
 
 ```js
-pager.next(); // returns a promise for the next page of documents
-pager.has(); // returns a promise for a boolean
+pager.nextPage(); // returns a promise for the next page of documents
+pager.hasMore(); // returns a promise for a boolean
+```
+
+Example:
+
+```js
+var pager = pouch.paginateByName('>=' 's', 10);
+pager.nextPage().then(function (page) {
+  // page is a list of 10 docs
+  return pager.hasMore();
+}).then(function (hasMore) {
+  // hasMore is a boolean
+});
 ```
 
 It automatically fetches pages in advance, so if `hasMorePages()` returns true, you can be sure that there are more pages left.  It also correctly uses the `startkey` pattern, so you don't have to worry about performance.
