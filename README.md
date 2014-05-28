@@ -60,7 +60,7 @@ var pouch = new PouchDB('myDB');
 
 #### createIndex(indexSpec [, options] [, callback])
 
-Create a new index (i.e. a design doc with a view) using the given specification, or do nothing if the index already exists.  Indexes are defined based on the field in the document you'd like to index.  Some examples:
+Create a new index using the given specification, or do nothing if the index already exists.  Indexes are defined based on the field in the document you'd like to index.  Some examples:
 
 ```js
 pouch.createIndex('name'); // index on doc.name
