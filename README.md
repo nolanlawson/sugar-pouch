@@ -36,16 +36,12 @@ var pouch = new PouchDB('myDB');
 * findBy*
 * countBy*
 * paginateBy*
-* updateBy*
-* deleteBy*
 * max*
 * min*
 
 **Built-in query functions**
 
 * findById
-* updateById
-* deleteById
 * maxId
 * minId
 
@@ -157,21 +153,11 @@ pouch.maxAge(); // returns the doc with the max age
 pouch.minAge(); // returns the doc with the min age
 ```
 
-#### deleteBy*(criteria [, options] [, callback])
-
-Find all documents matching the given criteria, and then delete them.
-
-#### updateBy*(criteria, updateFunction [, options] [, callback])
-
-Find all documents matching the gtiven criteria, and then apply the update function to them.  Keeps retrying until the document is updated, similar to `upsert`.
-
 ### Built-in query functions
 
 #### findById(criteria [, options] [, callback])
 #### maxId(criteria [, options] [, callback])
 #### minId(criteria [, options] [, callback])
-#### deleteById(criteria [, options] [, callback])
-#### updateById(criteria, updateFunction [, options] [, callback])
 
 Since `_id` is the primary index for a document, you also get these functions for free.  They work exactly the same as the `findBy*()`, `max*()`, etc. methods.  Go have fun.
 
