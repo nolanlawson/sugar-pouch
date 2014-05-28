@@ -50,7 +50,6 @@ var pouch = new PouchDB('myDB');
 * upsert
 * dbSize
 * dbVersion
-* grep
 
 **Utility functions**
 
@@ -184,21 +183,7 @@ Returns the total count of non-deleted documents in the database.
 
 #### dbVersion([callback])
 
-Returns the current version of the database (a.k.a. the `seq`).  Starts at 0, and increments every time a document is added or modified.
-
-#### grep(field, criteria [, options] [, callback])
-
-Performs an on-the-fly search using the given criteria, without using an index.  Performed in-memory without needing to write an index to disk first, so it's faster than the built-in `query()` method.
-
-All other `options` are the same as for `query()`, e.g. `{limit: 10}`, `{descending: true}`.
-
-```js
-pouch.grep('name', '=', 'sally'); // find docs where doc.name === 'sally'
-
-pouch.grep('name', 'in', 'larry', 'moe', 'curly'); // find where doc.name is one of those 3
-
-// etc.
-```
+Returns the current version of the database (a.k.a. the `update_seq`).  Starts at 0, and increments every time a document is added or modified.
 
 ### Utility functions
 
