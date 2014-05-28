@@ -35,7 +35,6 @@ var pouch = new PouchDB('myDB');
 * createIndex
 * findBy*
 * countBy*
-* paginateBy*
 * max*
 * min*
 
@@ -112,30 +111,6 @@ pouch.countByName('sally'); // how many people are named sally?
 ```
 
 If you're calling a remote CouchDB, then map/reduce is used under the hood, so the counting is distributed and only the count itself is sent over the wire.
-
-#### paginateBy*(criteria, pageSize [, options] [, callback])
-
-Returns a `Pager` object, on which you can call:
-
-```js
-pager.nextPage(); // returns a promise for the next page of documents
-pager.hasMore(); // returns a promise for a boolean
-```
-
-Example:
-
-```js
-var pager = pouch.paginateByName('>=' 's', 10);
-pager.nextPage().then(function (page) {
-  // page is a list of 10 docs
-  return pager.hasMore();
-}).then(function (hasMore) {
-  // hasMore is a boolean
-});
-```
-
-It automatically fetches one more doc than it needs, so if `hasMorePages()` returns true, you can be sure that there are more pages left.  It also correctly uses the `startkey` pattern, so you don't have to worry about performance.
-
 
 #### max*(criteria [, options] [, callback])
 #### min*(criteria [, options] [, callback])
