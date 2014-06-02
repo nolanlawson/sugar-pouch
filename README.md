@@ -192,3 +192,7 @@ Cross-browser shim for the `new Blob()` function.  Useful for working with attac
 #### supportedAdapters([callback])
 
 Returns the list of local adapters that this browser supports, e.g. `['idb']` on Firefox, `['websql']` on Safari, `['idb', 'websql']` on Chrome, and `['idb', 'websql', 'localstorage']` on Chrome if you have the localstorage plugin installed.
+
+#### toIndexableString(obj)
+
+Converts any object into an indexable string that still maintains CouchDB collation ordering. What this basically means is that any object you would normally emit as a key in map/reduce can be used as a document ID, thus avoiding building up a second index and speeding up your queries. This is the same function used by PouchDB under the hood for map/reduce.
