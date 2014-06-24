@@ -1,7 +1,7 @@
 SugarPouch
 ==========
 
-SugarPouch is a PouchDB plugin that offers a simpler, more streamlined API for common PouchDB operations.  It's syntactic sugar, but in many cases it's also a utility belt. If PouchDB is jQuery for databases, then thnk of SugarPouch as your Underscore.
+SugarPouch is a PouchDB plugin that offers a simpler, more streamlined API for common PouchDB operations.  It's syntactic sugar, but in many cases it's also a utility belt. If PouchDB is jQuery for databases, then think of SugarPouch as your Underscore.
 
 ```js
 var pouch = new PouchDB('myDB');
